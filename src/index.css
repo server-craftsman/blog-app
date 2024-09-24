@@ -11,3 +11,15 @@
 body {
   font-family: 'Poppins', sans-serif;
 } 
+
+.header-link {
+  @apply  flex items-center text-gray-700 px-4 py-2 rounded-md transition-all duration-200;
+}
+
+.header-link:hover {
+  @apply bg-gray-900 text-white rounded-2xl;
+}
+
+.header-link:active {
+  @apply bg-gray-900 text-white rounded-2xl;
+}
