@@ -1,36 +1,38 @@
-import axios from 'axios';
 import { IUser } from '../models/Users';
-import api from './api'; // Changed from import { api } to import api
-
-const API_URL = '/api/users'; // This is the mock API endpoint
+import api from './api';
 
 export const login = async (email: string, password: string): Promise<IUser> => {
   try {
-    // Fetch all users from the mock API
-    const response = await axios.get(API_URL);
-    const users: IUser[] = response.data;
-
-    // Find the user with matching email and password
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-      // If user is found, return the user data
-      return user;
-    } else {
-      // If user is not found, throw an error
+    const response = await api.get<IUser[]>('/users'); // Use api instance
+    const users = response.data;
+    const user = users.find(user => user.email === email && user.password === password);
+    if (!user) {
       throw new Error('Invalid email or password');
     }
+    return user;
   } catch (error) {
-    console.error('Login error:', error);
-    throw error;
+    throw new Error('Failed to fetch users');
   }
 };
 
 export const logout = async (): Promise<void> => {
-  await api.post('/logout');
+  // No network request needed for logout
+  localStorage.removeItem('user'); // Remove user data from local storage
 };
 
 export const register = async (username: string, email: string, password: string): Promise<IUser> => {
-  const response = await api.post('/register', { username, email, password });
-  return response.data;
+  try {
+    const response = await api.post<IUser>('/users', { // Use api instance
+      username,
+      email,
+      password,
+      role: 'user', // Default role
+      userCreatedAt: Date.now(),
+      userUpdatedAt: Date.now(),
+      userImage: 'path/to/image',
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to register user');
+  }
 };

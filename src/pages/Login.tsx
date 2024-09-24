@@ -14,8 +14,14 @@ const Login: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const user = await login(email, password);
+      if (user == null || !user.role) {
+        throw new Error('Invalid user or role');
+      }
+      if (user.role !== 'admin') {
+        throw new Error('Only admin users can log in');
+      }
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
       // Error is now handled in AuthContext, so we don't need to set it here
@@ -87,7 +93,7 @@ const Login: React.FC = () => {
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </motion.button>
-            <p className="text-sm text-gray-500 text-center">Don't have an account? <Link to="/register" className="text-indigo-600 hover:text-indigo-500">Sign up</Link></p>
+            {/* <p className="text-sm text-gray-500 text-center">Don't have an account? <Link to="/register" className="text-indigo-600 hover:text-indigo-500">Sign up</Link></p> */}
           </form>
         </motion.div>
       </div>

@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 
 interface AuthContextType {
   user: IUser | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<IUser>;
   logout: () => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   error: string | null;
@@ -25,12 +25,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<IUser> => {
     try {
-      const loggedInUser = await authService.login(email, password);
-      setUser(loggedInUser);
-      localStorage.setItem('user', JSON.stringify(loggedInUser));
+      const user = await authService.login(email, password); // This should return user details including role
+      if (user.role !== 'admin') {
+        throw new Error('Only admin users can log in');
+      }
+      setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
       setError(null);
+      return user;
     } catch (err) {
       if (err instanceof AxiosError) {
         setError(err.response?.data?.message || 'An error occurred during login');
@@ -42,9 +46,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await authService.logout();
-    setUser(null);
-    localStorage.removeItem('user');
+    try {
+      await authService.logout();
+      setUser(null);
+    } catch (error) {
+      setError('Failed to log out');
+    }
   };
 
   const register = async (username: string, email: string, password: string) => {

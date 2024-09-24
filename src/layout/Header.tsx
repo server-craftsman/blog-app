@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
+import { useLanguage } from '../context/LanguageContext';
 
 const Header = () => {
+  const { language, toggleLanguage } = useLanguage();
+
   return (
     <header className="bg-white shadow-lg">
       <div className="container mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center">
@@ -41,7 +44,6 @@ const Header = () => {
               <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Resource 2</a>
             </div>
           </div>
-          <a href="#" className="header-link mb-1 sm:mb-0">Pricing</a>
           <Link to="/dashboard" className="header-link mb-1 sm:mb-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-1">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -49,9 +51,15 @@ const Header = () => {
             Write
           </Link>
         </nav>
+        <button className="header-link mb-1 sm:mb-0 flex items-center" onClick={toggleLanguage}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+            <path d="M15.75 8.25a.75.75 0 0 1 .75.75c0 1.12-.492 2.126-1.27 2.812a.75.75 0 1 1-.992-1.124A2.243 2.243 0 0 0 15 9a.75.75 0 0 1 .75-.75Z" />
+            <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM4.575 15.6a8.25 8.25 0 0 0 9.348 4.425 1.966 1.966 0 0 0-1.84-1.275.983.983 0 0 1-.97-.822l-.073-.437c-.094-.565.25-1.11.8-1.267l.99-.282c.427-.123.783-.418.982-.816l.036-.073a1.453 1.453 0 0 1 2.328-.377L16.5 15h.628a2.25 2.25 0 0 1 1.983 1.186 8.25 8.25 0 0 0-6.345-12.4c.044.262.18.503.389.676l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 0 1-1.161.886l-.143.048a1.107 1.107 0 0 0-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 0 1-1.652.928l-.679-.906a1.125 1.125 0 0 0-1.906.172L4.575 15.6Z" clipRule="evenodd" />
+          </svg>
+          {language}
+        </button>
         <div className="flex flex-col sm:flex-row space-x-0 sm:space-x-4 items-center">
-          <Link to="/login" className="text-gray-700 hover:text-gray-900 mb-1 sm:mb-0">Log in</Link>
-          <Link to="/register" className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition duration-200">Sign up</Link>
+          <Link to="/login" className="header-link mb-1 sm:mb-0">Log in</Link>
         </div>
       </div>
     </header>
