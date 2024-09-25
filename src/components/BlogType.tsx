@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { IBlog } from '../models/Blogs';
-
 interface BlogItemProps {
   blog: IBlog;
 }

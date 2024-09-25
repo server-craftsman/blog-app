@@ -18,13 +18,15 @@ const Login: React.FC = () => {
       if (user == null || !user.role) {
         throw new Error('Invalid user or role');
       }
-      if (user.role !== 'admin') {
-        throw new Error('Only admin users can log in');
+      if (user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (user.role === 'customer') {
+        navigate('/'); 
+      } else {
+        throw new Error('Unauthorized role');
       }
-      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
-      // Error is now handled in AuthContext, so we don't need to set it here
     } finally {
       setIsLoading(false);
     }

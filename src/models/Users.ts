@@ -6,5 +6,5 @@ export interface IUser {
     role: string;
     userCreatedAt: number;
     userUpdatedAt: number;
-    userImage: string;
+    userImage?: string | File;
 }

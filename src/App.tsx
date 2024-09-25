@@ -7,10 +7,10 @@ import Register from './pages/Register';
 import Dashboard from './pages/admin/Dashboard';
 import { AuthProvider } from './context/AuthContext';
 import { BlogDetail } from './components/BlogDetail';
-import { LanguageProvider } from './context/LanguageContext';
 import AdminLayout from './layout/AdminLayout';
 import ManageUsers from './pages/admin/ManageUsers';
 import ManageBlogs from './pages/admin/ManageBlogs';
+import UserDetails from './pages/admin/UserDetails';
 const App: React.FC = () => {
   const router = createBrowserRouter([
     {
@@ -42,6 +42,10 @@ const App: React.FC = () => {
         {
           path: 'blogs',
           element: <ManageBlogs />
+        },
+        {
+          path: 'user/:id',
+          element: <UserDetails />
         }
       ]
     },
@@ -56,10 +60,8 @@ const App: React.FC = () => {
   ]);
 
   return (
-    <AuthProvider>
-      <LanguageProvider>
+    <AuthProvider> 
         <RouterProvider router={router} />
-      </LanguageProvider>
     </AuthProvider>
   );
 };

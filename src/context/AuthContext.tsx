@@ -28,8 +28,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string): Promise<IUser> => {
     try {
       const user = await authService.login(email, password); // This should return user details including role
-      if (user.role !== 'admin') {
-        throw new Error('Only admin users can log in');
+      if (user.role !== 'admin' && user.role !== 'customer') {
+        throw new Error('Only admin and customer users can log in');
       }
       setUser(user);
       localStorage.setItem('user', JSON.stringify(user));
@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         setError('An unexpected error occurred');
       }
-      throw err; // Re-throw the error so it can be caught in the Login component
+      throw err;
     }
   };
 

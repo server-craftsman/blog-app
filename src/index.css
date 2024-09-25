@@ -28,6 +28,7 @@ body {
   @apply inline w-4 h-4 mr-2
 }
 
+
 @media (max-width: 640px) {
   body {
     font-size: 14px; /* Adjust font size for mobile */

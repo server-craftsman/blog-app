@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
-import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
-  const { language, toggleLanguage } = useLanguage();
+  const { user, logout } = useAuth();
 
   return (
     <header className="bg-white shadow-lg">
@@ -51,15 +51,32 @@ const Header = () => {
             Write
           </Link>
         </nav>
-        <button className="header-link mb-1 sm:mb-0 flex items-center" onClick={toggleLanguage}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-            <path d="M15.75 8.25a.75.75 0 0 1 .75.75c0 1.12-.492 2.126-1.27 2.812a.75.75 0 1 1-.992-1.124A2.243 2.243 0 0 0 15 9a.75.75 0 0 1 .75-.75Z" />
-            <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM4.575 15.6a8.25 8.25 0 0 0 9.348 4.425 1.966 1.966 0 0 0-1.84-1.275.983.983 0 0 1-.97-.822l-.073-.437c-.094-.565.25-1.11.8-1.267l.99-.282c.427-.123.783-.418.982-.816l.036-.073a1.453 1.453 0 0 1 2.328-.377L16.5 15h.628a2.25 2.25 0 0 1 1.983 1.186 8.25 8.25 0 0 0-6.345-12.4c.044.262.18.503.389.676l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 0 1-1.161.886l-.143.048a1.107 1.107 0 0 0-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 0 1-1.652.928l-.679-.906a1.125 1.125 0 0 0-1.906.172L4.575 15.6Z" clipRule="evenodd" />
-          </svg>
-          {language}
-        </button>
         <div className="flex flex-col sm:flex-row space-x-0 sm:space-x-4 items-center">
-          <Link to="/login" className="header-link mb-1 sm:mb-0">Log in</Link>
+          {user ? (
+            <div className="relative flex items-center space-x-2 group transition-transform duration-300 hover:scale-105 z-50">
+              <img src={typeof user.userImage === 'string' ? user.userImage : 'default-avatar.png'} alt="User" className="w-12 h-12 rounded-full border-2 border-blue-400 shadow-lg transition-shadow duration-300 hover:shadow-xl" />
+              <span className="text-gray-800 font-semibold text-lg">{user.username}</span>
+              <div className="absolute hidden group-hover:block bg-white shadow-lg mt-[9rem] rounded-md z-50 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                <div className="flex flex-col px-3 py-2">
+                  <Link to="/profile" className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="inline w-4 h-4 mr-2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 14.5c3.5 0 6.5-2.5 6.5-5.5S15.5 3.5 12 3.5 5.5 6.5 5.5 9.5s3 5.5 6.5 5.5z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 14.5c-4.5 0-8.5 2-8.5 5.5V21h17v-1.5c0-3.5-4-5.5-8.5-5.5z" />
+                    </svg>
+                    Profile
+                  </Link>
+                  <button onClick={logout} className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="inline w-4 h-4 mr-2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H3m0 0l4-4m-4 4l4 4m12-12v6m0 0H9" />
+                    </svg>
+                    Log out
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Link to="/login" className="header-link mb-1 sm:mb-0">Log in</Link>
+          )}
         </div>
       </div>
     </header>
