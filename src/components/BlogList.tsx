@@ -5,11 +5,11 @@ import api from '../services/api';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
-const BlogList: React.FC = () => {
-  const [blogs, setBlogs] = useState<IBlog[]>([]);
-  const [displayedBlogs, setDisplayedBlogs] = useState<IBlog[]>([]);
+const BlogList: React.FC<{ blogs: IBlog[] }> = ({ blogs: initialBlogs }) => {
+  const [blogs, setBlogs] = useState<IBlog[]>(initialBlogs);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 3;
   const [error, setError] = useState<string | null>(null);
-  const [showMore, setShowMore] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -21,7 +21,6 @@ const BlogList: React.FC = () => {
           blogUpdatedAt: new Date(blog.blogUpdatedAt).getTime()
         }));
         setBlogs(processedBlogs);
-        setDisplayedBlogs(processedBlogs.slice(0, 6));
         setError(null);
       } catch (error) {
         console.error('Error fetching blogs:', error);
@@ -36,20 +35,24 @@ const BlogList: React.FC = () => {
     fetchBlogs();
   }, []);
 
-  const handleShowMore = () => {
-    setDisplayedBlogs(blogs.slice(0, displayedBlogs.length + 6));
-    if (displayedBlogs.length + 6 >= blogs.length) {
-      setShowMore(false);
+  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+  const displayedBlogs = blogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
-  useEffect(() => {
-    if (blogs.length > displayedBlogs.length) {
-      setShowMore(true);
-    } else {
-      setShowMore(false);
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
     }
-  }, [blogs, displayedBlogs]);
+  };
 
   if (error) {
     return <div className="container mx-auto px-4 text-red-500 font-semibold text-center py-8">{error}</div>;
@@ -72,16 +75,37 @@ const BlogList: React.FC = () => {
               <BlogItem key={blog.id} blog={blog} />
             ))}
           </motion.div>
-          {showMore && (
-            <div className="text-center mt-8">
+          <div className="flex justify-center mt-8">
+            <button 
+              onClick={handlePrevPage} 
+              disabled={currentPage === 1} 
+              className="mx-1 py-2 px-4 rounded-md bg-gray-300 text-gray-700 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
               <button
-                onClick={handleShowMore}
-                className="py-2 px-4 bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-semibold rounded-md shadow-md hover:from-purple-700 hover:to-indigo-800 transition duration-150 ease-in-out"
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={`mx-1 py-2 px-4 rounded-md ${currentPage === index + 1 ? 'bg-purple-600 text-white' : 'bg-gray-300 text-gray-700'}`}
               >
-                Show More
+                {index + 1}
               </button>
-            </div>
-          )}
+            ))}
+            <button 
+              onClick={handleNextPage} 
+              disabled={currentPage === totalPages} 
+              className="mx-1 py-2 px-4 rounded-md bg-gray-300 text-gray-700 flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
+              </svg>
+              Next
+            </button>
+          </div>
         </>
       )}
     </div>

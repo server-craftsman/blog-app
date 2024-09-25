@@ -6,4 +6,5 @@ export interface IBlog {
     blogCreatedAt: number;
     blogUpdatedAt: number;
     blogImage: string;
+    topic: Array<string> | string;
 }

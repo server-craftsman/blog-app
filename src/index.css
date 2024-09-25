@@ -28,6 +28,13 @@ body {
   @apply inline w-4 h-4 mr-2
 }
 
+.filter-button {
+  @apply bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl;
+}
+
+.filter-button:hover {
+  @apply bg-gradient-to-r from-purple-700 to-indigo-800;
+}
 
 @media (max-width: 640px) {
   body {

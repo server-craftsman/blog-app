@@ -33,9 +33,9 @@ const Footer = () => {
           </div>
           <div className="w-full md:w-1/3">
             <h5 className="text-lg font-semibold mb-4">Contact Us</h5>
-            <p className="text-gray-400 mb-2">Tân Phú Trung, Củ Chi</p>
-            <p className="text-gray-400 mb-2">Hồ Chí Minh</p>
-            <p className="text-gray-400 mb-2">Email: huyit2003@gmail.com</p>
+            <p className="text-gray-400 mb-2">FPT Software Academy</p>
+            <p className="text-gray-400 mb-2">High-tech Park, Tan Phu Ward, District 9, Ho Chi Minh City, Vietnam</p>
+            <p className="text-gray-400 mb-2">Email: huyit2003@fptsoftware.com</p>
             <p className="text-gray-400">Phone: (123) 456-7890</p>
           </div>
         </div>
